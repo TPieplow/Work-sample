@@ -1,3 +1,4 @@
+
 # Work sample - extracting an element value from an XML file
 
 ## Strategy
@@ -99,3 +100,5 @@ print(f"Value of target in trans-unit with ID {handler.attribute_value}: \n\t---
 with open("output.json", "w") as outfile:
     json.dump(handler.target_text, outfile)
 ```
+=======
+
