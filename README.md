@@ -2,7 +2,7 @@
 # Work sample - extracting an element value from an XML file
 
 ## Update!!
-* I added this snippet to notify the user if element doesnt contain a value, I feel a bit foolish since the solution was actually quite simple. I attempted to implement it within both characters-method and endElement-method, but without success. However I then realized (during a show) that this gets the job done.
+* I added this snippet to notify the user if element doesnt contain a value, I feel a bit foolish since the solution was actually quite simple. I attempted to implement it within both characters-method and endElement-method, but without success. However I then realized (during a shower) that this gets the job done.
 
 ```python
 if handler.target_text.strip() == "" or None:
