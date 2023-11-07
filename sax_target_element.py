@@ -48,8 +48,6 @@ class RetrieveTargetValue(ContentHandler):
     # Closing the element-tag once processing is complete.
     def endElement(self, name):
         if name == self.target_element and self.is_inside_target == 1:
-            if self.is_text == 1:
-                print("Text", self.target_text if self.target_text else "No value")
             self.is_inside_target = 0
             self.id_value = None
 
@@ -74,9 +72,11 @@ except SAXParseException as e:
 except Exception as e:
     print(f"Unknown error: {str(e)}")
 
-
 # Console message to the user
-print(f"Value of target in {handler.parent_element} with ID {handler.attribute_value}: \n\t------> {handler.target_text} <------")
+if handler.target_text.strip() == "" or None:
+    print("Element doesnt contain a value")
+else:
+    print(f"Value of target in {handler.parent_element} with ID {handler.attribute_value}: \n\t------> {handler.target_text} <------")
 
 # Creating an output file in .json
 with open("output.json", "w") as outfile:
