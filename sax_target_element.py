@@ -18,7 +18,6 @@ class RetrieveTargetValue(ContentHandler):
         self.target_element = target_element
         self.id_value = None
         self.is_inside_target = 0
-        self.is_text = 0
         
     # Presents a message to the user.
     def startDocument(self):
@@ -42,7 +41,6 @@ class RetrieveTargetValue(ContentHandler):
     def characters(self, value):
         if self.is_inside_target == 1 and self.target_element:
                 self.target_text = value    
-                self.is_text = 1
 
 
     # Closing the element-tag once processing is complete.
@@ -74,7 +72,7 @@ except Exception as e:
 
 # Console message to the user
 if handler.target_text.strip() == "" or None:
-    print("Element doesnt contain a value")
+    print(f"{handler.target_element} doesnt contain a value")
 else:
     print(f"Value of target in {handler.parent_element} with ID {handler.attribute_value}: \n\t------> {handler.target_text} <------")
 
