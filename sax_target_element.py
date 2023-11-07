@@ -48,10 +48,8 @@ class RetrieveTargetValue(ContentHandler):
     # Closing the element-tag once processing is complete.
     def endElement(self, name):
         if name == self.target_element and self.is_inside_target == 1:
-            if self.is_text == 0 and self.target_element == "source":
-                print("No value")
-            elif self.is_text == 1:
-                print("Captured text", self.target_text if self.target_text else "No value")
+            if self.is_text == 1:
+                print("Text", self.target_text if self.target_text else "No value")
             self.is_inside_target = 0
             self.id_value = None
 
