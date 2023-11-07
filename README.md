@@ -67,7 +67,7 @@ handler = RetrieveTargetValue("id", "42007", "trans-unit", "target")
                 self.is_inside_target = 0
 ```
 
-- I did stuggle here, as I tried to add some validation but it wouldnt work out as expected. The main idea was that if the element was empty, raise an Error. But theres something in the code stopping me from doing it the way I wanted.
+- I did stuggle here, as I tried to add some validation but it wouldnt work out as expected. I finally solved it, read update above.
 - If the conditions from the startElement method is met and we are in the correct element, we assign value into target_text, this is where the extraction of the element value occurs. 
 ```python
          def characters(self, value):
