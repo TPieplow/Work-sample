@@ -1,6 +1,16 @@
 
 # Work sample - extracting an element value from an XML file
 
+## Update!!
+* I added this snippet to notify the user if element doesnt contain a value, I feel a bit foolish since the solution was actually quite simple. I attempted to implement it within both characters-method and endElement-method, but without success. However I then realized (during a show) that this gets the job done.
+
+```python
+if handler.target_text.strip() == "" or None:
+    print(f"{handler.target_element} doesnt contain a value")
+else:
+    print(f"Value of target in {handler.parent_element} with ID {handler.attribute_value}: \n\t------> {handler.target_text} <------")
+```
+
 ## Strategy
 * As I had no prior experience working with XML, the research begun. I ended up at W3schools and found out about XPath, this became my initial solution for the work sample: a combination of the xml.Etree-parser and Xpath. A rather simplistic solution, with the main logic is captured in this code snippet:
 
@@ -77,7 +87,7 @@ handler = RetrieveTargetValue("id", "42007", "trans-unit", "target")
 
 
 ```python
-# This is where the user inputs the requirements for the parse.
+# Fill in parameters: attribute_name, attribute_value, parent_element, target_element.
 handler = RetrieveTargetValue("id", "42007", "trans-unit", "target")
 # Creates a parser
 xml_parser = xml.sax.make_parser()
@@ -94,7 +104,10 @@ except Exception as e:
     print(f"Unknown error: {str(e)}")
 
 # Console message to the user
-print(f"Value of target in trans-unit with ID {handler.attribute_value}: \n\t------> {handler.target_text} <------")
+if handler.target_text.strip() == "" or None:
+    print(f"{handler.target_element} doesnt contain a value")
+else:
+    print(f"Value of target in {handler.parent_element} with ID {handler.attribute_value}: \n\t------> {handler.target_text} <------")
 
 # Creating an output file in .json
 with open("output.json", "w") as outfile:
