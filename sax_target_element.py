@@ -1,7 +1,7 @@
 # https://docs.python.org/3/library/xml.sax.handler.html#contenthandler-objects
 # https://nanonets.com/blog/parse-xml-files-using-python/
 # https://vegibit.com/python-xml-parsing/
-# Python & XML, av Christopher A. Jones, Fred L. Drake, O'Reilly (framför de tre första kapitlen)
+# Python & XML, av Christopher A. Jones, Fred L. Drake, O'Reilly (framför allt de tre första kapitlen)
 
 import xml.sax
 import json
@@ -18,6 +18,7 @@ class RetrieveTargetValue(ContentHandler):
         self.target_element = target_element
         self.id_value = None
         self.is_inside_target = 0
+        self.is_text = 0
         
     # Presents a message to the user.
     def startDocument(self):
@@ -28,8 +29,9 @@ class RetrieveTargetValue(ContentHandler):
         if name == self.parent_element:
             self.id_value = attrs.getValue(self.attribute_name)
             if self.id_value == self.attribute_value:
-                self.is_inside_target = 1
-                self.id_value = None
+                if self.target_element.lower():
+                    self.is_inside_target = 1
+                    self.id_value = None
             elif not self.id_value:
                 raise ValueError(f"Couldnt find the {self.parent_element} element with {self.attribute_name} {self.attribute_value}")
             else:
@@ -39,11 +41,17 @@ class RetrieveTargetValue(ContentHandler):
     # If the conditions from above are met, save the value/content in a string (target_text).
     def characters(self, value):
         if self.is_inside_target == 1 and self.target_element:
-            self.target_text = value
+                self.target_text = value    
+                self.is_text = 1
+
 
     # Closing the element-tag once processing is complete.
     def endElement(self, name):
         if name == self.target_element and self.is_inside_target == 1:
+            if self.is_text == 0 and self.target_element == "source":
+                print("No value")
+            elif self.is_text == 1:
+                print("Captured text", self.target_text if self.target_text else "No value")
             self.is_inside_target = 0
             self.id_value = None
 
@@ -52,7 +60,7 @@ class RetrieveTargetValue(ContentHandler):
         print('Finished!')
 
 
-# Fill in parameters: attribute_name, attribute value, parent_element, target_element.
+# Fill in parameters: attribute_name, attribute_value, parent_element, target_element.
 handler = RetrieveTargetValue("id", "42007", "trans-unit", "target")
 # Creates a parser
 xml_parser = xml.sax.make_parser()
@@ -68,8 +76,9 @@ except SAXParseException as e:
 except Exception as e:
     print(f"Unknown error: {str(e)}")
 
+
 # Console message to the user
-print(f"Value of target in trans-unit with ID {handler.attribute_value}: \n\t------> {handler.target_text} <------")
+print(f"Value of target in {handler.parent_element} with ID {handler.attribute_value}: \n\t------> {handler.target_text} <------")
 
 # Creating an output file in .json
 with open("output.json", "w") as outfile:
